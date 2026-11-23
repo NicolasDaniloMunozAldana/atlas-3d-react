@@ -1,0 +1,49 @@
+{
+  "id": "arbol-binario",
+  "nombre": "Árbol binario",
+  "resumen": "Cada nodo tiene a lo sumo dos hijos: los menores a la izquierda, los mayores a la derecha.",
+  "cuando_usarlo": "Búsquedas, inserciones y ordenamientos rápidos sobre datos comparables (diccionarios ordenados, índices, expresiones).",
+  "riesgo": "Si los datos llegan ya ordenados el árbol se degenera en una lista y pierde su ventaja; hay que balancearlo (AVL, rojo-negro).",
+  "piezas": {
+    "n8": {
+      "responsabilidad": "Es el único nodo sin padre. Compara el valor buscado y decide si bajar a la izquierda o a la derecha.",
+      "habla_con": [
+        "n3",
+        "n10"
+      ]
+    },
+    "n3": {
+      "responsabilidad": "Raíz del subárbol izquierdo: todo lo que cuelga de él es menor que 8.",
+      "habla_con": [
+        "n8",
+        "n1",
+        "n6"
+      ]
+    },
+    "n10": {
+      "responsabilidad": "Raíz del subárbol derecho: todo lo que cuelga de él es mayor que 8.",
+      "habla_con": [
+        "n8",
+        "n14"
+      ]
+    },
+    "n1": {
+      "responsabilidad": "Nodo terminal: si la búsqueda llega aquí y no coincide, el valor no existe.",
+      "habla_con": [
+        "n3"
+      ]
+    },
+    "n6": {
+      "responsabilidad": "Nodo terminal del subárbol izquierdo, mayor que 3 y menor que 8.",
+      "habla_con": [
+        "n3"
+      ]
+    },
+    "n14": {
+      "responsabilidad": "Nodo terminal del subárbol derecho: el máximo se alcanza siempre yendo a la derecha.",
+      "habla_con": [
+        "n10"
+      ]
+    }
+  }
+}

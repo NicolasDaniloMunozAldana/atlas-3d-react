@@ -1,0 +1,776 @@
+:root {
+  color-scheme: dark;
+  --purple-1: #402f6c;
+  --purple-2: #6a4cb3;
+  --purple-4: #d2c7ed;
+  --purple-6: #ece6f0;
+  --green-1: #68eeb4;
+  --green-2: #c3f4df;
+  --blue-1: #11062d;
+  --blue-2: #8c849f;
+  --neutral-3: #ffffff;
+  font-family: "Mulish", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at 50% 0%, #1c1140 0%, var(--blue-1) 65%);
+  color: var(--neutral-3);
+}
+
+#app,
+#root {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 9999px;
+  padding: 0.7rem 1.25rem;
+  margin: 1.25rem auto 0;
+  width: min(640px, calc(100% - 2.5rem));
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.nav-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--green-1);
+  flex-shrink: 0;
+}
+
+.sw-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--purple-4);
+  background: rgba(106, 76, 179, 0.35);
+  padding: 0.35rem 0.7rem;
+  border-radius: 9999px;
+  white-space: nowrap;
+}
+
+.sw-badge.activo {
+  background: rgba(104, 238, 180, 0.18);
+  color: var(--green-1);
+}
+
+.sw-badge.error {
+  background: rgba(191, 76, 72, 0.25);
+  color: #ff9a94;
+}
+
+.hero {
+  max-width: 640px;
+  margin: 2.5rem auto 0;
+  padding: 0 1.25rem;
+  text-align: center;
+}
+
+.hero-eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--green-1);
+}
+
+.hero h1 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  font-weight: 800;
+}
+
+.hero p {
+  margin: 0 auto;
+  max-width: 480px;
+  color: var(--blue-2);
+  font-size: 0.98rem;
+  line-height: 1.5;
+}
+
+.escena-contenedor {
+  position: relative;
+  width: 100%;
+  /* Sesión 42 (Lighthouse): el alto se reserva desde el principio (mismo 4:3 que usa visor.ts) para que
+     lo de abajo no «salte» cuando el canvas llega tarde. */
+  aspect-ratio: 4 / 3;
+  max-height: 560px;
+  margin: 0.75rem 0;
+  border-radius: 28px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.escena-contenedor canvas {
+  position: relative;
+  z-index: 1; /* el canvas transparente va ENCIMA del video (Sesión 36) */
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none; /* el dedo gira el modelo (OrbitControls) en vez de desplazar la página */
+}
+
+/* VISOR (Sesiones 35-38) */
+.visor-zona {
+  width: min(460px, calc(100% - 2.5rem));
+  margin: 2rem auto;
+}
+
+.visor-barra {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-visor {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.06);
+  color: inherit;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.45rem 0.85rem;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.btn-visor:hover:not(:disabled) {
+  border-color: var(--green-1);
+}
+
+.btn-visor.activo {
+  background: rgba(104, 238, 180, 0.18);
+  border-color: var(--green-1);
+  color: var(--green-1);
+}
+
+.btn-visor.destacado:not(:disabled) {
+  background: var(--green-1);
+  color: var(--blue-1);
+  border-color: var(--green-1);
+}
+
+.btn-visor:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Sesión 36: el video ocupa todo el contenedor, detrás del canvas. */
+.fondo-camara {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* llena sin deformarse, recortando lo que sobre */
+}
+
+.aviso-visor {
+  margin: 0.75rem 0 0;
+  padding: 0.6rem 0.9rem;
+  border-radius: 12px;
+  background: rgba(255, 209, 102, 0.12);
+  color: #ffd166;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.lectura-visor {
+  display: block;
+  min-height: 1rem;
+  text-align: center;
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--green-1);
+}
+
+.estado-ar {
+  margin: 0.4rem 0;
+  text-align: center;
+  font-size: 0.8rem;
+  color: var(--purple-4);
+}
+
+.diag-ar {
+  font-size: 0.75rem;
+  color: var(--blue-2);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.5rem 0.8rem;
+}
+
+.diag-ar summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.diag-ar-texto {
+  white-space: pre-wrap;
+  margin: 0.5rem 0;
+  font-size: 0.75rem;
+  color: var(--purple-6);
+}
+
+.aviso-demo {
+  margin: 0.75rem 0 0;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  color: var(--blue-2);
+  text-align: center;
+}
+
+/* Sesión 38: overlay DOM de la sesión AR. Mientras dura, el navegador lo estira por toda la pantalla
+   (fondo transparente); aquí solo se acomoda lo de adentro. */
+.xr-overlay {
+  display: none;
+}
+
+.xr-overlay:xr-overlay {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.6em;
+  padding-bottom: 1.2em;
+}
+
+.xr-overlay {
+  touch-action: none; /* los gestos son nuestros: que el navegador no haga scroll ni zoom */
+}
+
+.xr-overlay p {
+  margin: 0;
+  background: rgba(17, 6, 45, 0.75);
+  color: var(--purple-6);
+  padding: 0.4em 0.8em;
+  border-radius: 8px;
+  font-size: 0.9em;
+}
+
+.xr-overlay button {
+  background: var(--green-1);
+  color: var(--blue-1);
+  border: 0;
+  border-radius: 9999px;
+  padding: 0.7em 1.2em;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+/* DESCARGAS SIN CONEXIÓN (Sesión 37) */
+.descargas-zona {
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  padding: 0 1.25rem;
+  width: 100%;
+  text-align: center;
+}
+
+.descargas-zona h2 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--purple-4);
+  margin: 0 0 1rem;
+}
+
+.descargas-barra {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.descargas-zona progress {
+  width: min(320px, 100%);
+  margin-top: 0.75rem;
+  accent-color: var(--green-1);
+}
+
+.estado-linea {
+  margin: 0.5rem 0 0;
+  min-height: 1rem;
+  font-size: 0.78rem;
+  color: var(--blue-2);
+}
+
+.patron-card.sin-conexion .estado {
+  color: var(--green-1);
+}
+
+.patron-card.destacada {
+  border-color: #ffd166;
+  box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.25);
+}
+
+.catalogo {
+  max-width: 720px;
+  margin: 0.5rem auto 3rem;
+  padding: 0 1.25rem;
+  width: 100%;
+}
+
+.catalogo h2 {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--purple-4);
+  margin: 0 0 1rem;
+}
+
+.catalogo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 0.75rem;
+}
+
+.patron-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.patron-card .numero {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--green-1);
+}
+
+.patron-card .nombre {
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.patron-card .estado {
+  font-size: 0.72rem;
+  color: var(--blue-2);
+}
+
+.patron-card.seleccionada {
+  border-color: var(--green-1);
+  background: rgba(104, 238, 180, 0.07);
+}
+
+.patron-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn-fav {
+  border: 0;
+  background: transparent;
+  color: var(--blue-2);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.1rem 0.25rem;
+}
+
+.btn-fav.activo {
+  color: #ffd166;
+}
+
+.patron-abrir {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  text-align: left;
+  padding: 0;
+  cursor: pointer;
+}
+
+.patron-abrir:hover {
+  color: var(--green-1);
+}
+
+.patron-card .visita {
+  font-size: 0.7rem;
+  color: var(--purple-4);
+}
+
+/* PROGRESO (Sesión 33) */
+.progreso {
+  max-width: 720px;
+  margin: 0 auto 3rem;
+  padding: 0 1.25rem;
+  width: 100%;
+}
+
+.progreso h2 {
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--purple-4);
+  margin: 0 0 1rem;
+}
+
+.progreso h3 {
+  margin: 0 0 0.45rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blue-2);
+}
+
+.progreso-fila {
+  margin-bottom: 1rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.chip {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.05);
+  color: inherit;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--green-1);
+}
+
+.chips-vacio {
+  font-size: 0.8rem;
+  color: var(--blue-2);
+}
+
+.nota-estudio {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.nota-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  margin-bottom: 0.6rem;
+}
+
+.nota-cabecera h3 {
+  margin: 0;
+}
+
+.pill {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 9999px;
+  background: rgba(106, 76, 179, 0.35);
+  color: var(--purple-4);
+  white-space: nowrap;
+}
+
+.pill.desbloqueado {
+  background: rgba(104, 238, 180, 0.18);
+  color: var(--green-1);
+}
+
+.form-clave-atlas {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+}
+
+.nota-estudio input,
+.nota-estudio textarea {
+  flex: 1;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  color: inherit;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.55rem 0.75rem;
+}
+
+.nota-estudio textarea:disabled {
+  opacity: 0.5;
+}
+
+.nota-acciones {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.btn-nota {
+  border: 0;
+  background: var(--green-1);
+  color: var(--blue-1);
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.5rem 0.9rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-nota:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.btn-nota.secundario {
+  background: rgba(255, 255, 255, 0.1);
+  color: inherit;
+}
+
+.nota-mensaje {
+  min-height: 1.1rem;
+  margin: 0.6rem 0 0;
+  font-size: 0.78rem;
+  color: var(--blue-2);
+}
+
+.nota-mensaje[data-tipo="ok"] {
+  color: var(--green-1);
+}
+
+.nota-mensaje[data-tipo="error"] {
+  color: #ff9a94;
+}
+
+.pie {
+  margin-top: auto;
+  text-align: center;
+  color: var(--blue-2);
+  font-size: 0.75rem;
+  padding: 1rem 1.25rem 2rem;
+}
+
+.pie p {
+  margin: 0;
+}
+
+/* Sesión 39-40: gestos y selector de piezas dentro de la sesión AR */
+.xr-overlay .xr-datos {
+  font: 0.72em ui-monospace, monospace;
+}
+
+.xr-overlay .xr-piezas {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  max-width: 94%;
+}
+
+.xr-overlay .xr-piezas .xr-pieza {
+  flex: 1;
+  font-size: 0.82em;
+  max-height: 6.5em;
+  overflow: hidden;
+}
+
+.xr-overlay .xr-piezas button {
+  padding: 0.6em 0.9em;
+}
+
+/* Sesión 40: panel del modelo */
+.contenido {
+  width: 100%;
+}
+
+.modelo-panel {
+  margin: 0.8rem 0;
+  /* Sesión 42: se llena con JavaScript; se reserva su alto para no mover lo de abajo. */
+  min-height: 25em;
+}
+
+.modelo-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.modelo-tabs .tab {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--purple-6);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  padding: 0.4rem 0.85rem;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.modelo-tabs .tab[aria-pressed="true"] {
+  background: var(--green-1);
+  color: var(--blue-1);
+  border-color: var(--green-1);
+  font-weight: 800;
+}
+
+.modelo-resumen {
+  margin: 0.7rem 0 0.4rem;
+  color: var(--purple-4);
+  font-size: 0.92rem;
+}
+
+.leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.9rem;
+  font-size: 0.78rem;
+  color: var(--blue-2);
+  margin-bottom: 0.6rem;
+}
+
+.leyenda-item i,
+.chip-pieza i,
+.pieza-detalle h3 i {
+  display: inline-block;
+  width: 0.8em;
+  height: 0.8em;
+  border-radius: 50%;
+  margin-right: 0.4em;
+  vertical-align: -0.05em;
+}
+
+.chips-piezas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.chip-pieza {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--purple-6);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 10px;
+  padding: 0.35rem 0.65rem;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.chip-pieza[aria-pressed="true"] {
+  border-color: var(--green-1);
+  box-shadow: 0 0 0 1px var(--green-1) inset;
+  background: rgba(104, 238, 180, 0.1);
+}
+
+.pieza-detalle {
+  margin-top: 0.7rem;
+  padding: 0.8rem 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  min-height: 4.5em;
+}
+
+.pieza-detalle h3 {
+  margin: 0 0 0.3rem;
+  font-size: 1rem;
+}
+
+.pieza-detalle h3 small {
+  color: var(--blue-2);
+  font-weight: 400;
+  margin-left: 0.4em;
+}
+
+.pieza-detalle p {
+  margin: 0.3rem 0;
+}
+
+.nota-ficha {
+  color: #ffd58a;
+  font-size: 0.85rem;
+}
+
+.patron-card .resumen-card {
+  color: var(--purple-4);
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.btn-ver3d {
+  margin-top: 0.4rem;
+  background: rgba(104, 238, 180, 0.12);
+  color: var(--green-1);
+  border: 1px solid rgba(104, 238, 180, 0.4);
+  border-radius: 9999px;
+  padding: 0.35rem 0.8rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-ver3d:hover {
+  background: rgba(104, 238, 180, 0.22);
+}
+
+/* Sesión 41: instalación y estado de conexión */
+.estado-conexion {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  margin: 0;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.85rem;
+  background: #5b3a12;
+  color: #ffe9c2;
+  border-bottom: 1px solid #a8741f;
+}
+
+.instalar-zona {
+  margin-bottom: 1rem;
+}

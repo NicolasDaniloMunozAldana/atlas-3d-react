@@ -1,0 +1,35 @@
+{
+  "id": "cliente-cache-servidor",
+  "nombre": "Cliente-Caché-Servidor",
+  "resumen": "Una caché intermedia responde lo ya pedido y solo molesta al servidor cuando no lo tiene.",
+  "cuando_usarlo": "Cuando muchas peticiones repiten los mismos datos y se quiere reducir latencia y carga del servidor (CDN, Service Worker, Redis).",
+  "riesgo": "Datos desactualizados: si la caché no se invalida a tiempo, el cliente ve información vieja.",
+  "piezas": {
+    "cliente": {
+      "responsabilidad": "Siempre pregunta primero a la caché; ignora si la respuesta vino de ella o del servidor.",
+      "habla_con": [
+        "cache"
+      ]
+    },
+    "cache": {
+      "responsabilidad": "Decide: si tiene la respuesta (hit) la entrega; si no (miss) la pide al servidor y la guarda.",
+      "habla_con": [
+        "cliente",
+        "servidor"
+      ]
+    },
+    "servidor": {
+      "responsabilidad": "Produce la respuesta autorizada y consulta la base de datos.",
+      "habla_con": [
+        "cache",
+        "bd"
+      ]
+    },
+    "bd": {
+      "responsabilidad": "Persistencia; nunca la ve la caché ni el cliente.",
+      "habla_con": [
+        "servidor"
+      ]
+    }
+  }
+}

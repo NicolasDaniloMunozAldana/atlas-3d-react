@@ -1,0 +1,42 @@
+{
+  "id": "publicador-suscriptor",
+  "nombre": "Publicador-Suscriptor",
+  "resumen": "Quien publica no conoce a quien escucha: un canal reparte los eventos a los suscritos.",
+  "cuando_usarlo": "Notificaciones, tiempo real, integración entre servicios que no deben depender unos de otros.",
+  "riesgo": "Es difícil seguir el flujo completo y garantizar el orden o la entrega: un evento perdido puede pasar inadvertido.",
+  "piezas": {
+    "publicador": {
+      "responsabilidad": "Publica un mensaje en un tema y se olvida: no espera respuesta de nadie.",
+      "habla_con": [
+        "canal"
+      ]
+    },
+    "canal": {
+      "responsabilidad": "Mantiene la lista de suscriptores por tema y reparte cada evento a todos.",
+      "habla_con": [
+        "publicador",
+        "suscriptor-a",
+        "suscriptor-b",
+        "suscriptor-c"
+      ]
+    },
+    "suscriptor-a": {
+      "responsabilidad": "Reacciona solo a los eventos de su interés; puede entrar o salir sin afectar a los demás.",
+      "habla_con": [
+        "canal"
+      ]
+    },
+    "suscriptor-b": {
+      "responsabilidad": "Recibe la misma copia del evento, de forma independiente.",
+      "habla_con": [
+        "canal"
+      ]
+    },
+    "suscriptor-c": {
+      "responsabilidad": "Procesa el evento a su ritmo, sin bloquear al publicador.",
+      "habla_con": [
+        "canal"
+      ]
+    }
+  }
+}

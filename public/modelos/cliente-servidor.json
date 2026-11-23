@@ -1,0 +1,28 @@
+{
+  "id": "cliente-servidor",
+  "nombre": "Cliente-Servidor",
+  "resumen": "Un cliente pide, un servidor responde: la lógica y los datos viven en el servidor.",
+  "cuando_usarlo": "Aplicaciones web y móviles donde varios clientes comparten los mismos datos y reglas centralizadas.",
+  "riesgo": "El servidor es un punto único de fallo y de cuello de botella: si se cae o se satura, todos los clientes sufren.",
+  "piezas": {
+    "cliente": {
+      "responsabilidad": "Presenta los datos al usuario y traduce sus acciones en peticiones. No guarda la verdad de los datos.",
+      "habla_con": [
+        "servidor"
+      ]
+    },
+    "servidor": {
+      "responsabilidad": "Centraliza reglas y validaciones. Atiende a muchos clientes a la vez.",
+      "habla_con": [
+        "cliente",
+        "bd"
+      ]
+    },
+    "bd": {
+      "responsabilidad": "Persistencia. El cliente nunca habla con ella directamente.",
+      "habla_con": [
+        "servidor"
+      ]
+    }
+  }
+}

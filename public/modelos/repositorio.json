@@ -1,0 +1,35 @@
+{
+  "id": "repositorio",
+  "nombre": "Repositorio",
+  "resumen": "La lógica pide datos a una interfaz; detrás, una implementación decide dónde viven realmente.",
+  "cuando_usarlo": "Cuando se quiere cambiar de base de datos o probar la lógica con datos falsos sin tocar las reglas del negocio.",
+  "riesgo": "Capa extra de indirección: en aplicaciones muy simples añade código sin dar un beneficio real.",
+  "piezas": {
+    "servicio": {
+      "responsabilidad": "Usa solo la interfaz del repositorio; nunca escribe SQL ni conoce la base de datos.",
+      "habla_con": [
+        "interfaz"
+      ]
+    },
+    "interfaz": {
+      "responsabilidad": "Define QUÉ se puede hacer con los datos. El dominio depende de ella, no de la implementación.",
+      "habla_con": [
+        "servicio",
+        "implementacion"
+      ]
+    },
+    "implementacion": {
+      "responsabilidad": "Define CÓMO se guardan los datos. Se puede reemplazar sin tocar el dominio.",
+      "habla_con": [
+        "interfaz",
+        "almacen"
+      ]
+    },
+    "almacen": {
+      "responsabilidad": "Persistencia real; solo la implementación la conoce.",
+      "habla_con": [
+        "implementacion"
+      ]
+    }
+  }
+}
